@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import accounts from './accounts'
+import accounts from './account'
 import general from './general'
 
 Vue.use(Vuex)
