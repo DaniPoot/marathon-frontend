@@ -13,7 +13,8 @@ module.exports = {
     'eol-last': ['error', 'always'],
     'quotes': ['error', 'single'],
     'object-curly-spacing': ['error', 'always'],
-    'no-multiple-empty-lines': ['error', { 'max': 1 }]
+    'no-multiple-empty-lines': ['error', { 'max': 1 }],
+    'indent': ['error', 2]
   },
   parserOptions: {
     parser: 'babel-eslint'
