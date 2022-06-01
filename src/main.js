@@ -9,7 +9,7 @@ Vue.config.productionTip = false
 
 Vue.use(Argon)
 new Vue({
-  router,
+  router: router({ store }),
   store,
   render: h => h(App)
 }).$mount('#app')

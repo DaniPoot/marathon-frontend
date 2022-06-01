@@ -4,6 +4,8 @@ import Vuex from 'vuex'
 import accounts from './account'
 import general from './general'
 
+import * as authAPI from '../services/authApi'
+
 Vue.use(Vuex)
 
 const Store = new Vuex.Store({
@@ -12,4 +14,7 @@ const Store = new Vuex.Store({
     general
   },
 })
+
+Store.$auth = authAPI
+
 export default Store 
