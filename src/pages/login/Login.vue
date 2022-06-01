@@ -41,18 +41,22 @@
                             <base-input alternative
                                         class="mb-3"
                                         placeholder="Email"
-                                        addon-left-icon="ni ni-email-83">
+                                        addon-left-icon="ni ni-email-83"
+                                        v-model="form.email"
+                                        >
                             </base-input>
                             <base-input alternative
                                         type="password"
                                         placeholder="Password"
-                                        addon-left-icon="ni ni-lock-circle-open">
+                                        addon-left-icon="ni ni-lock-circle-open"
+                                        v-model="form.password"
+                                        >
                             </base-input>
-                            <base-checkbox>
+                            <base-checkbox v-model="form.remember">
                                 Remember me
                             </base-checkbox>
                             <div class="text-center">
-                                <base-button type="primary" class="my-4">Sign In</base-button>
+                                <base-button type="primary" class="my-4" @click="onSubmit">Sign In</base-button>
                             </div>
                         </form>
                     </template>
@@ -74,8 +78,35 @@
     </div>
 </section>
 </template>
+
 <script>
-export default {}
+import { mapActions } from 'vuex'
+export default {
+  name: 'Login',
+  data () {
+    return {
+      form:{
+        email: '',
+        password: '',
+        remember: false
+      }
+    }
+  },
+  methods: {
+    ...mapActions('accounts', ['login']),
+    async onSubmit () {
+      try {
+        const { password, email, remember } = this.form
+        const user = await this.login({ email, password, remember })
+        if (user) {
+          this.$router.push({ name: 'home' })
+        }
+      } catch (e) {
+      }
+    }
+  }
+}
 </script>
+
 <style>
 </style>
