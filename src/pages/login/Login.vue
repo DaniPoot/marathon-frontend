@@ -1,5 +1,5 @@
 <template>
-<section class="section section-shaped section-lg my-0">
+<section class="section section-shaped section-lg my-0" style="height: 100vh">
     <div class="shape shape-style-1 bg-gradient-default">
         <span></span>
         <span></span>
@@ -18,24 +18,9 @@
                       body-classes="px-lg-5 py-lg-5"
                       class="border-0">
                     <template>
-                        <div class="text-muted text-center mb-3">
-                            <small>Sign in with</small>
-                        </div>
-                        <div class="btn-wrapper text-center">
-                            <base-button type="neutral">
-                                <img slot="icon" src="img/icons/common/github.svg">
-                                Github
-                            </base-button>
-
-                            <base-button type="neutral">
-                                <img slot="icon" src="img/icons/common/google.svg">
-                                Google
-                            </base-button>
-                        </div>
-                    </template>
-                    <template>
                         <div class="text-center text-muted mb-4">
-                            <small>Or sign in with credentials</small>
+                            <h2 class="font-weight-bold">Maratón de conocimientos</h2>
+                            <small>Inicia sesión con tus credenciales</small>
                         </div>
                         <form role="form">
                             <base-input alternative
@@ -52,11 +37,8 @@
                                         v-model="form.password"
                                         >
                             </base-input>
-                            <base-checkbox v-model="form.remember">
-                                Remember me
-                            </base-checkbox>
                             <div class="text-center">
-                                <base-button type="primary" class="my-4" @click="onSubmit">Sign In</base-button>
+                                <base-button type="primary" class="my-4" @click="onSubmit">Iniciar sesión</base-button>
                             </div>
                         </form>
                     </template>
@@ -64,12 +46,12 @@
                 <div class="row mt-3">
                     <div class="col-6">
                         <a href="#" class="text-light">
-                            <small>Forgot password?</small>
+                            <small>¿Olvidaste tu contraseña?</small>
                         </a>
                     </div>
                     <div class="col-6 text-right">
-                        <a href="#" class="text-light">
-                            <small>Create new account</small>
+                        <a href="/signup" class="text-light">
+                            <small>Registrarse</small>
                         </a>
                     </div>
                 </div>
