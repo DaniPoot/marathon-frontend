@@ -2,7 +2,10 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import('@/pages/home/Home.vue')
+    component: () => import('@/pages/home/Home.vue'),
+    meta: {
+      authenticated: true,
+    }
   },
   {
     path: '/login',
