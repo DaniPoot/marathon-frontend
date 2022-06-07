@@ -19,7 +19,7 @@ export default function ({ store }) {
 
   router.beforeEach((to, from, next) => {
     const isAuthenticated = store.getters['accounts/isAuthenticated']
-    if (to.name !== 'login' && !isAuthenticated) next({ name: 'login' })
+    if (to.name !== 'login' && !isAuthenticated && to.meta.authenticated) next({ name: 'login' })
     else next()
   })
 
