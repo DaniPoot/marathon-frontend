@@ -4,7 +4,7 @@ const routes = [
     name: 'home',
     component: () => import('@/pages/home/Home.vue'),
     meta: {
-      authenticated: true,
+      authenticated: false,
     }
   },
   {
@@ -15,7 +15,7 @@ const routes = [
   {
     path: '/signup',
     name: 'signup',
-    component: () => import('@/pages/register/Register.vue')
+    component: () => import('@/pages/register/Register.vue'),
   },
   {
     path: '/components',

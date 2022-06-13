@@ -1,5 +1,10 @@
 <template>
 <section class="section section-shaped section-lg my-0" style="height: 100vh">
+    <img
+        class="absolute-bottom col-3 d-none d-lg-block"
+        alt="..."
+        src="@/assets/img/svg/undraw_finish_line_katerina_limpitsouni_xy20.svg"
+    />
     <div class="shape shape-style-1 bg-gradient-default">
         <span></span>
         <span></span>
@@ -10,7 +15,7 @@
         <span></span>
         <span></span>
     </div>
-    <div class="container pt-lg-md">
+    <div class="container pt-2">
         <div class="row justify-content-center">
             <div class="col-lg-5">
                 <card type="secondary" shadow
@@ -20,7 +25,7 @@
                     <template>
                         <div class="text-center text-muted mb-4">
                             <h2 class="font-weight-bold">Maratón de conocimientos</h2>
-                            <small>Inicia sesión con tus credenciales</small>
+                            <small>Inicia sesión con tu correo electrónico</small>
                         </div>
                         <form role="form">
                             <base-input alternative
@@ -44,16 +49,12 @@
                     </template>
                 </card>
                 <div class="row mt-3">
-                    <div class="col-6">
-                        <a href="#" class="text-light">
-                            <small>¿Olvidaste tu contraseña?</small>
-                        </a>
-                    </div>
-                    <div class="col-6 text-right">
-                        <a href="/signup" class="text-light">
-                            <small>Registrarse</small>
-                        </a>
-                    </div>
+                  <div class="col-12">
+                      <small>¿Aún no tienes una cuenta?</small>
+                      <a href="/#/signup" class="text-light ml-2">
+                          <small>Registrate aquí</small>
+                      </a>
+                  </div>
                 </div>
             </div>
         </div>
