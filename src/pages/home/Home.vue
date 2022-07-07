@@ -31,7 +31,7 @@
       <div class="row">
         <div class="col">
           <nav class="nav d-flex flex-column align-items-center mt-7">
-            <a class="nav-link text-white font-weight-bold display-4" href="/">Iniciar nueva partida</a>
+            <a class="nav-link text-white font-weight-bold display-4" href="/#/newgame">Iniciar nueva partida</a>
             <a class="nav-link text-white font-weight-bold display-4" href="/">Ver perfil</a>
             <a class="nav-link text-white font-weight-bold display-4" href="/#/login">Cerrar sesión</a>
           </nav>

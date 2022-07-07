@@ -15,7 +15,7 @@
             <span></span>
             <span></span>
         </div>
-        <div class="container pt-2">
+        <div class="container pt-0">
             <div class="row justify-content-center">
                 <div class="col-lg-5">
                     <card type="secondary" shadow
@@ -29,29 +29,37 @@
                             </div>
                             <form role="form">
                                 <base-input alternative
+                                            name="name"
                                             class="mb-3"
                                             placeholder="Nombre Completo"
-                                            addon-left-icon="ni ni-single-02">
+                                            addon-left-icon="ni ni-single-02"
+                                            v-model="form.name">
                                 </base-input>
                                 <base-input alternative
                                             class="mb-3"
+                                            type="email"
+                                            name="email"
                                             placeholder="Correo electrónico"
-                                            addon-left-icon="ni ni-email-83">
+                                            addon-left-icon="ni ni-email-83"
+                                            v-model="form.email">
                                 </base-input>
                                 <base-input alternative
                                             type="password"
+                                            name="password"
                                             placeholder="Constraseña"
-                                            addon-left-icon="ni ni-lock-circle-open">
+                                            addon-left-icon="ni ni-lock-circle-open"
+                                            v-model="form.password">
                                 </base-input>
                                 <base-input alternative
-                                            type="Repetir contraseña"
-                                            placeholder="Password"
-                                            addon-left-icon="ni ni-lock-circle-open">
+                                            type="password"
+                                            name="password2"
+                                            placeholder="Repetir contraseña"
+                                            addon-left-icon="ni ni-lock-circle-open"
+                                            v-model="form.password2">
                                 </base-input>
                                 <vue-recaptcha sitekey="6Lc-0WggAAAAACDCWg9AO333wjxXud9pOiDivfZw"> </vue-recaptcha>
-                          
                                 <div class="text-center">
-                                    <base-button type="primary" class="my-4">REGISTRARSE</base-button>
+                                    <base-button type="primary" class="mt-4">REGISTRARSE</base-button>
                                 </div>
                             </form>
                         </template>
@@ -72,7 +80,17 @@
 <script>
 import { VueRecaptcha } from 'vue-recaptcha'
 export default {
-  components: { VueRecaptcha }
+  components: { VueRecaptcha },
+  data () {
+    return {
+      form:{
+        name: '',
+        email: '',
+        password: '',
+        password2: '',
+      }
+    }
+  },
 }
 </script>
 <style>

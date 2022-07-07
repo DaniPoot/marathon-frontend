@@ -81,10 +81,10 @@ export default {
       try {
         const { password, email, remember } = this.form
         const user = await this.login({ email, password, remember })
-        if (user) {
-          this.$router.push({ name: 'home' })
-        }
+        this.$router.push({ name: 'home' })
+
       } catch (e) {
+        
       }
     }
   }

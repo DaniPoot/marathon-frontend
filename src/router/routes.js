@@ -21,6 +21,15 @@ const routes = [
     path: '/components',
     name: 'components',
     component: () => import('@/views/Components.vue')
+  }, {
+    path: '/newgame',
+    name: 'newgame',
+    component: () => import('@/pages/game/Asigments.vue')
+  },
+  {
+    path: '/difficulty',
+    name: 'difficulty',
+    component: () => import('@/pages/game/Difficulty.vue')
   }
 ]
 
