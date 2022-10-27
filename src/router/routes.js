@@ -30,6 +30,11 @@ const routes = [
     path: '/difficulty',
     name: 'difficulty',
     component: () => import('@/pages/game/Difficulty.vue')
+  },
+  {
+    path: '/board',
+    name: 'board',
+    component: () => import('@/pages/game/Board.vue')
   }
 ]
 

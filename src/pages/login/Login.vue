@@ -17,7 +17,10 @@
     </div>
     <div class="container pt-2">
         <div class="row justify-content-center">
-            <div class="col-lg-5">
+            <div class="col-lg-6">
+                <base-alert type="danger" icon="fa fa-exclamation-triangle" dismissible :class="{'d-none': !loginFailed }">
+                  <span slot="text"><strong>Oops!</strong> Correo electrónico o contraseña incorrectos.</span>
+                </base-alert>
                 <card type="secondary" shadow
                       header-classes="bg-white pb-5"
                       body-classes="px-lg-5 py-lg-5"
@@ -27,21 +30,31 @@
                             <h2 class="font-weight-bold">Maratón de conocimientos</h2>
                             <small>Inicia sesión con tu correo electrónico</small>
                         </div>
-                        <form role="form">
+                        <form role="form" class="d-flex flex-column">
+                            <label for="email">Correo electrónico</label>
                             <base-input alternative
-                                        class="mb-3"
                                         placeholder="Email"
                                         addon-left-icon="ni ni-email-83"
                                         v-model="form.email"
+                                        name="email"
+                                        class="mb-0"
+                                        :class="{'border border-danger': isEmailEmpty || isEmailInvalid}"
                                         >
                             </base-input>
+                            <label class="text-danger" for="email" :class="{'d-none': !isEmailEmpty}"><small>El correo electrónico es obligatorio</small></label>
+                            <label class="text-danger" for="email" :class="{'d-none': !isEmailInvalid}"><small>El correo electrónico es inválido</small></label>
+                            <label for="password" class="mt-3">Contraseña</label>
                             <base-input alternative
                                         type="password"
-                                        placeholder="Password"
+                                        placeholder="Contraseña"
                                         addon-left-icon="ni ni-lock-circle-open"
                                         v-model="form.password"
+                                        name="password"
+                                        class="mb-0"
+                                        :class="{'border border-danger': isPasswordEmpty}"
                                         >
                             </base-input>
+                            <label class="text-danger" for="password" :class="{'d-none': !isPasswordEmpty}"><small>La contraseña es obligatoria</small></label>
                             <div class="text-center">
                                 <base-button type="primary" class="my-4" @click="onSubmit">Iniciar sesión</base-button>
                             </div>
@@ -64,6 +77,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import { validEmail } from '@/utilities/formValidation.js'
 export default {
   name: 'Login',
   data () {
@@ -72,21 +86,37 @@ export default {
         email: '',
         password: '',
         remember: false
-      }
+      },
+      isEmailEmpty: false,
+      isPasswordEmpty: false,
+      isEmailInvalid: false,
+      loginFailed: false
     }
   },
   methods: {
     ...mapActions('accounts', ['login']),
     async onSubmit () {
       try {
-        const { password, email, remember } = this.form
-        const user = await this.login({ email, password, remember })
-        this.$router.push({ name: 'home' })
+        const { password, email } = this.form
+        this.isEmailEmpty = !email
+        this.isPasswordEmpty = !password
+
+        const validated = validEmail(email)
+        this.isEmailInvalid = email && !validated
+        
+        if(email && password && validated){
+          const user = await this.login({ email, password })
+          if(user){
+            this.$router.push({ name: 'home' })
+          }else{
+            this.loginFailed = true
+          }
+        }
 
       } catch (e) {
         
       }
-    }
+    },
   }
 }
 </script>
