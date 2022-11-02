@@ -53,8 +53,9 @@
 </template>
 <script>
 import asigments from '../../data/asigments.js'
+import { mapActions } from 'vuex'
 export default {
-  name: 'Login',
+  name: 'Asigments',
   data () {
     return {
       asigments,
@@ -64,7 +65,13 @@ export default {
       asigmentsSelected: []
     }
   },
+  async mounted() {
+    const { id : userId } = JSON.parse(localStorage['auth-account'])
+    const subs = await this.getSubjectsByUser({ userId })
+    console.log(subs)
+  },
   methods: {
+    ...mapActions('subjects', ['getSubjectsByUser']),
     getInitials(name) {
       const names = name.split(' ')
       const initials = names.reduce( (letters, word) => letters + word[0], '')

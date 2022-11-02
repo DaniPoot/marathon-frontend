@@ -4,9 +4,15 @@ export const login = async function ({ commit }, { email, password, remember = f
     const { token, user } = await this.$auth.login({ email, password })
     commit('setAccount', user)
     commit('setToken', token)
+    const authAccount = {
+      email: user.email,
+      name: user.full_name,
+      id: user.id,
+      type: user.type
+    }
     localStorage.setItem('autologin', remember)
     localStorage.setItem('auth-token', token)
-    localStorage.setItem('auth-account', user)
+    localStorage.setItem('auth-account', JSON.stringify(authAccount))
     return user
   } catch (e) {
     console.error(e)

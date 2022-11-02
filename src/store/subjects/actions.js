@@ -30,7 +30,8 @@ export const deleteSubject = async function ({ commit }, { id }) {
 
 export const getSubjectsByUser = async function ({ commit }, { userId }) {
   try {
-    const token = this.getters['accounts/token']
+    const token =   localStorage['auth-token'] // this.getters['accounts/token']
+    console.log(token)
     const { subjects } = this.$subjects.getSubjectsByUser({ userId, token })
     return subjects 
   } catch (e) {
