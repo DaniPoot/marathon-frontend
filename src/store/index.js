@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 import accounts from './account'
 import general from './general'
+import subjects from './subjects'
 
 import * as authAPI from '../services/authApi'
 import * as answersAPI from '../services/answersApi'
@@ -16,7 +17,8 @@ Vue.use(Vuex)
 const Store = new Vuex.Store({
   modules: {
     accounts,
-    general
+    general,
+    subjects
   },
 })
 
