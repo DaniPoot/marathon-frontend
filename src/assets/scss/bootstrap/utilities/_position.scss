@@ -28,6 +28,24 @@ $positions: static, relative, absolute, fixed, sticky;
   z-index: $zindex-fixed;
 }
 
+.absolute-start {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.absolute-end {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.absolute-bottom {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
 .sticky-top {
   @supports (position: sticky) {
     position: sticky;

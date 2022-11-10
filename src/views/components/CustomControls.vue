@@ -35,7 +35,6 @@
                         Checked
                     </base-radio>
 
-
                     <base-radio name="radio2" class="mb-3" v-model="radio.radio2" disabled>
                         Disabled unchecked
                     </base-radio>

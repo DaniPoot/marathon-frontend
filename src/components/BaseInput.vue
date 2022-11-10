@@ -16,7 +16,6 @@
             </label>
         </slot>
 
-
         <div v-if="addonLeftIcon || $slots.addonLeft" class="input-group-prepend">
         <span class="input-group-text">
           <slot name="addonLeft">
