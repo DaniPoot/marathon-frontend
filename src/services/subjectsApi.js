@@ -25,9 +25,29 @@ export const deleteSubject = ({ id, token }) => {
 }
 
 export const getSubjectsByUser = ({ userId, token }) => {
-  return axios.get('/subjects', { created_by: userId }, {
+  return axios.get(`/subjects/user/${userId}`, {
     headers: {
       authorization: `Bearer ${token}` 
+    }
+  })
+}
+
+export const getAllSubjects = ({ token }) => {
+  return axios.get('/subjects', {
+    headers: {
+      authorization: `Bearer ${token}` 
+    }
+  })
+
+}
+
+export const getAllSubjectsByQuery = ({ query, token }) => {
+  return axios.get('/subjects/search', {
+    headers: {
+      authorization: `Bearer ${token}`
+    },
+    params: {
+      query
     }
   })
 }

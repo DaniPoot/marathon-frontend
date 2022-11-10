@@ -31,9 +31,28 @@ export const deleteSubject = async function ({ commit }, { id }) {
 export const getSubjectsByUser = async function ({ commit }, { userId }) {
   try {
     const token = this.getters['accounts/token']
-    const { subjects } = this.$subjects.getSubjectsByUser({ userId, token })
+    const { subjects } = await this.$subjects.getSubjectsByUser({ userId, token })
     return subjects 
   } catch (e) {
     
+  }
+}
+
+export const getAllSubjects = async function ({ commit }) {
+  try {
+    const token = this.getters['accounts/token']
+    const { subjects } = await this.$subjects.getAllSubjects({ token })
+    return subjects 
+  } catch (e) {
+    
+  }
+}
+
+export const getAllSubjectsByQuery = async function ({ commit }, query) {
+  try {
+    const token = this.getters['accounts/token']
+    const { subjects } = await this.$subjects.getAllSubjectsByQuery({ query, token })
+    return subjects 
+  } catch (e) {
   }
 }
