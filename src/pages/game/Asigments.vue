@@ -22,26 +22,24 @@
                                     placeholder="Buscar Asignatura"
                                     class="mt-4"
                                     v-model="search"
-                                    @input="searchAsigments"
                                     addon-left-icon="fa fa-search">
-                                    
                                 </base-input>
                             </div>
                         </div>
                         <div class="my-1 py-2 border-top text-center">
                             <div class="row justify-content-center">
-                                <base-button @click="sendAsigments" type="primary btn-sm" class="text-white btn-lg col-md-3 col-8" style="font-size:22px">SIGUIENTE</base-button>
+                                <base-button @click="sendSubjects" type="primary btn-sm" class="text-white btn-lg col-md-3 col-8" style="font-size:22px">SIGUIENTE</base-button>
                             </div>
                         </div>
                         <div class="row justify-content-center">
-                            <card class="col-sm-12 col-md-4 col-lg-2 m-1" v-for="asigment in [...asigmentsSelected,...asigmentsMatched]" v-bind:key="asigment.id">
+                            <card class="col-sm-12 col-md-4 col-lg-2 m-1" v-for="subject in allSubjects" v-bind:key="subject.id">
                                  <div class="card-body d-flex flex-column justify-content-between p-0 m-0 h-100">
                                     <div>
-                                        <p class="mx-auto bg-primary d-flex align-items-center justify-content-center h1 font-weight-bold text-white rounded-circle" style="height:70px; width:70px">{{getInitials(asigment.name)}}</p> 
-                                        <p class="font-weight-bold text-center">{{asigment.name}}</p>
+                                        <p class="mx-auto bg-primary d-flex align-items-center justify-content-center h1 font-weight-bold text-white rounded-circle" style="height:70px; width:70px">{{getInitials(subject.name)}}</p> 
+                                        <p class="font-weight-bold text-center">{{subject.name}}</p>
                                     </div>
-                                        <base-button v-if="asigment.selected" type="primary btn-sm" :id="'asigment-'+asigment.id" @click="removeAsigment" >SELECCIONADA</base-button>
-                                        <base-button v-else type="neutral btn-sm" :id="'asigment-'+asigment.id" @click="selectAsigment">SELECCIONAR</base-button>
+                                        <base-button v-if="subject.selected" type="primary btn-sm" @click="deselectSubject(subject)" >SELECCIONADA</base-button>
+                                        <base-button v-else type="neutral btn-sm" @click="selectSubject(subject)" >SELECCIONAR</base-button>
                                 </div>
                             </card>
                         </div>
@@ -52,49 +50,57 @@
     </div>
 </template>
 <script>
-import asigments from '../../data/asigments.js'
+import { mapActions, mapMutations } from 'vuex'
+
 export default {
   name: 'Login',
   data () {
     return {
-      asigments,
-      allAsigments: [...asigments],
+      subjects: [],
+      subjectByQuery: [],
       search: '',
-      asigmentsMatched: asigments,
-      asigmentsSelected: []
+    }
+  },
+  async created () {
+    const subjects = await this.getAllSubjects()
+    this.subjects = subjects.map(s => ({ ...s, selected: false }))
+  },
+  watch: {
+    async search () {
+      if (this.search) {
+        const subjectsByQuery = await this.getAllSubjectsByQuery(this.search)
+        this.subjectByQuery = subjectsByQuery.filter(sub => !this.subjectsId.includes(sub.id))
+      }
+    }
+  },
+  computed: {
+    allSubjects () {
+      const subjects = [...this.subjects, ...this.subjectByQuery]
+      return subjects
+    },
+    subjectsId () {
+      return this.subjects.map(v => v.id)
     }
   },
   methods: {
+    ...mapActions('subjects', ['getAllSubjects', 'getAllSubjectsByQuery']),
+    ...mapMutations('subjects',['setSubjects']),
+    selectSubject (subject) {
+      subject.selected = true
+    },
+    deselectSubject (subject) {
+      subject.selected = false
+    },
     getInitials(name) {
       const names = name.split(' ')
       const initials = names.reduce( (letters, word) => letters + word[0], '')
       return initials.substr(0,2).toUpperCase()
     },
-
-    searchAsigments(query) {
-      let matched = this.asigments.filter( asigment => asigment.name.toLowerCase().includes(query.toLowerCase()))
-      this.asigmentsMatched = matched
-    },
-    
-    selectAsigment(e) {
-      const asigmentId = e.target.id.split('-')[1]
-      const asigmentSelectedIndex = this.asigments.findIndex(asigment => asigment.id == asigmentId)
-      this.asigmentsSelected.push( { ...this.asigments[asigmentSelectedIndex], selected: true })
-      this.asigments.splice(asigmentSelectedIndex, 1)
-    },
-
-    removeAsigment(e) {
-      const asigmentId = e.target.id.split('-')[1]
-      const asigmentRemovedIndex = this.asigmentsSelected.findIndex(asigment => asigment.id == asigmentId)
-      this.asigments.unshift( { ...this.asigmentsSelected[asigmentRemovedIndex], selected: false })
-      this.asigmentsSelected.splice(asigmentRemovedIndex, 1)
-    },
-
-    sendAsigments() {
-      const ids = this.asigmentsSelected.map(asigment => asigment.id)
-      this.$router.push({ path: 'difficulty', query: { asigments: ids } })
+    sendSubjects () {
+      const subjects = this.allSubjects.filter(asigment => asigment.selected)
+      this.setSubjects(subjects)
+      this.$router.push({ path: 'difficulty' })
     }
-
   }
 }
 </script>
