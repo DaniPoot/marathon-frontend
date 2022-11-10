@@ -37,3 +37,16 @@ export const getTopicsByUser = async function ({ commit }, { userId }) {
     
   }
 }
+
+export const getTopicsBySubject = async function ({ commit }, { subject }) {
+  try {
+    commit('general/setIsLoading', true, { root: true })
+    const token = this.getters['accounts/token']
+    const { topics } = await this.$topics.getTopicsBySubject({ subject, token })
+    return topics
+  } catch (e) {
+    
+  } finally {
+    commit('general/setIsLoading', false, { root: true })
+  }
+}

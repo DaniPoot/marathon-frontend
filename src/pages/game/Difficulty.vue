@@ -18,45 +18,39 @@
                         <card shadow class="col-md-5 col-12 mx-4">
                             <p class="h4 text-primary font-weight-bold">Dificultad</p>
                             <div class="d-flex mt-3 mb-2 flex-wrap flex-column flex-md-row">
-                                <base-checkbox checked class="mr-3 mt-1" v-model="checked[0]">
-                                    Fácil
-                                </base-checkbox>
-                                <base-checkbox class="mr-3 mt-1" v-model="checked[1]">
-                                    Media
-                                </base-checkbox>
-                                <base-checkbox class="mr-3 mt-1" v-model="checked[2]">
-                                    Difícil
+                                <base-checkbox class="mr-3 mt-1" v-for="difficulty of difficulties" v-model="difficulty.checked" :key="difficulty.id">
+                                  {{ difficulty.name }}
                                 </base-checkbox>
                             </div>
                         </card>
                         <card shadow class="col-md-5 col-12 mx-4 mt-4 mt-md-0">
                             <p class="h4 text-primary font-weight-bold">Ajuste de dificultad</p>
                             <div class="d-flex mt-3 mb-2 flex-wrap">
-                                <base-radio  name="radio-0" class="mr-3 mt-1" v-model="radio">
+                                <base-radio  name="manual" class="mr-3 mt-1" v-model="difficultyAjustmen">
                                     Manual
                                 </base-radio>
-                                <base-radio name="radio-1" class="mr-3 mt-1" v-model="radio">
+                                <base-radio name="automatic" class="mr-3 mt-1" v-model="difficultyAjustmen">
                                     Automática
                                 </base-radio>
-                                <base-radio name="radio-2" class="mr-3 mt-1" v-model="radio">
+                                <base-radio name="inteligente" class="mr-3 mt-1" v-model="difficultyAjustmen">
                                     Inteligente
                                 </base-radio>
                             </div>
                         </card>
                     </div>
                     <div class="asigments px-0 px-md-5" id="accordionExample">
-                        <div v-for="asigment in asigmentsSelected" :key="asigment.id">
-                            <div class="card-header d-flex align-items-center" :id="`heading${asigment.id}`">
-                                <p class="mb-0 bg-primary d-flex align-items-center justify-content-center font-weight-bold text-white rounded-circle" style="height:30px; width:30px">{{getInitials(asigment.name)}}</p> 
+                        <div v-for="subject in subjectsWithTopics" :key="subject.id">
+                            <div class="card-header d-flex align-items-center" :id="`heading${subject.id}`">
+                                <p class="mb-0 bg-primary d-flex align-items-center justify-content-center font-weight-bold text-white rounded-circle" style="height:30px; width:30px">{{getInitials(subject.name)}}</p> 
                                 <h2 class="mb-0">
-                                    <p class="mb-0 btn btn-link text-default" type="button" data-toggle="collapse" :data-target="`#collapse${asigment.id}`" aria-expanded="true" :aria-controls="`#collapse${asigment.id}`">
-                                        {{asigment.name}}
+                                    <p class="mb-0 btn btn-link text-default" type="button" data-toggle="collapse" :data-target="`#collapse${subject.id}`" aria-expanded="true" :aria-controls="`#collapse${subject.id}`">
+                                        {{subject.name}}
                                     </p>
                                 </h2>
                             </div>
-                            <div :id="`collapse${asigment.id}`" class="collapse" :aria-labelledby="`heading${asigment.id}`" data-parent="#accordionExample">
+                            <div :id="`collapse${subject.id}`" class="collapse" :aria-labelledby="`heading${subject.id}`" data-parent="#accordionExample">
                                 <div class="card-body">
-                                    <base-checkbox v-for="n in asigment.topics" :key="n" checked class="ml-1 mb-2 font-weight-bold">Tema {{n}}</base-checkbox>
+                                    <base-checkbox v-for="topic in subject.topics" :key="topic.id" v-model="topic.checked"  class="ml-1 mb-2 font-weight-bold">{{ topic.name }}</base-checkbox>
                                 </div>
                             </div>
                         </div>
@@ -72,21 +66,47 @@
     </div>
 </template>
 <script>
-import asigments from '../../data/asigments.js'
-
-$('.asigments').collapse()
+import { mapActions, mapMutations, mapState } from 'vuex'
 
 export default {
   data() {
     return {
-      asigmentsSelected: [],
-      asigments,
-      radio:  'radio-1',
-      checked: [ true, false, false],
+      difficulties: [],
+      subjectsWithTopics: [],
+      difficultyAjustmen: undefined
     }
   },
-
+  async created () {
+    await Promise.all([this.getDifficulties(), this.getTopics()])
+  },
+  computed: {
+    ...mapState('subjects', ['subjects']),
+    topicsSelected () {
+      return this.subjectsWithTopics.reduce((prev, subject) => {
+        const topicsSelected = subject.topics.filter(v => v.checked).map(v => v.id)
+        return prev.concat(topicsSelected)
+      }, [])
+    },
+    difficultiesSelected () {
+      return this.difficulties.filter(v => v.checked)
+    }
+  },
   methods: {
+    ...mapActions('topics', ['getTopicsBySubject']),
+    ...mapActions('difficulties', ['getAllDifficulties']),
+    ...mapMutations('game', ['setTopics', 'setDifficulties', 'setAjustmen']),
+    async getDifficulties () {
+      this.difficulties = await this.getAllDifficulties()
+    },
+    async getTopics () {
+      const promisesSubjects = this.subjects.map(subject => this.getTopicsBySubject({ subject: subject.id }))
+      const topics = await Promise.all(promisesSubjects)
+      this.subjectsWithTopics = this.subjects.map((subject, index)=> ({
+        id: subject.id,
+        name: subject.name,
+        topics: topics[index] || []
+      }))
+    },
     getInitials(name) {
       const names = name.split(' ')
       const initials = names.reduce( (letters, word) => letters + word[0], '')
@@ -94,14 +114,12 @@ export default {
     },
 
     play() {
-      this.$router.push({ path: 'board', query: { setting: this.radio.split('-')[1], difficulty: this.checked } })
+      this.setTopics(this.topicsSelected)
+      this.setDifficulties(this.difficultiesSelected)
+      this.setAjustmen(this.difficultyAjustmen)
+      console.log(this.difficultyAjustmen)
+      this.$router.push({ path: 'board' })
     }
-  },
-
-  mounted() {
-    const ids = this.$route.query.asigments
-    this.asigmentsSelected = asigments.filter(asigment => ids.includes(asigment.id.toString()))
-    if(this.asigmentsSelected.length <= 0)  this.$router.go()
   },
 }
 </script>

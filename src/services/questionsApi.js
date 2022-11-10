@@ -31,3 +31,11 @@ export const getQuestionsByUser = ({ userId, token }) => {
     }
   })
 }
+
+export const getQuestionByTopicsAndDifficulties = ({ topics, difficulties, token }) => {
+  return axios.post('/questions/random', { topics, difficulties }, {
+    headers: {
+      authorization: `Bearer ${token}` 
+    }
+  })
+}

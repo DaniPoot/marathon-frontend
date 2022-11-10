@@ -32,7 +32,7 @@ export const getDifficultiesByUser = ({ userId, token }) => {
   })
 }
 
-export const getDifficulties = ({ userId, token }) => {
+export const getDifficulties = ({ token }) => {
   return axios.get('/difficulties', {
     headers: {
       authorization: `Bearer ${token}` 

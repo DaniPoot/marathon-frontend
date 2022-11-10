@@ -31,3 +31,11 @@ export const getTopicsByUser = ({ userId, token }) => {
     }
   })
 }
+
+export const getTopicsBySubject = ({ subject, token }) => {
+  return axios.get(`/topics/subject/${subject}`, {
+    headers: {
+      authorization: `Bearer ${token}` 
+    }
+  })
+}

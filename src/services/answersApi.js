@@ -31,3 +31,11 @@ export const getAnswersByUser = ({ userId, token }) => {
     }
   })
 }
+
+export const verifyAnswer = ({ token, question, answer }) => {
+  return axios.post('/answers/verify/',{ question, answer } ,{
+    headers: {
+      authorization: `Bearer ${token}` 
+    }
+  })
+}

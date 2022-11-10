@@ -4,6 +4,11 @@ import Vuex from 'vuex'
 import accounts from './account'
 import general from './general'
 import subjects from './subjects'
+import topics from './topics'
+import difficulties from './difficulties'
+import questions from './questions'
+import answers from './answers'
+import game from './game'
 
 import * as authAPI from '../services/authApi'
 import * as answersAPI from '../services/answersApi'
@@ -18,7 +23,12 @@ const Store = new Vuex.Store({
   modules: {
     accounts,
     general,
-    subjects
+    subjects,
+    topics,
+    difficulties,
+    questions,
+    answers,
+    game
   },
 })
 

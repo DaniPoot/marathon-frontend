@@ -28,20 +28,10 @@ export const deleteDifficulty = async function ({ commit }, { id }) {
   }
 }
 
-export const getAnswersByUser = async function ({ commit }, { userId }) {
+export const getAllDifficulties = async function ({ commit }) {
   try {
     const token = this.getters['accounts/token']
-    const { difficulties } = this.$difficulties.getDifficultiesByUser({ userId, token })
-    return difficulties
-  } catch (e) {
-    
-  }
-} 
-
-export const getAnswers = async function ({ commit }) {
-  try {
-    const token = this.getters['accounts/token']
-    const { difficulties } = this.$difficulties.getDifficulties({ token })
+    const { difficulties } = await this.$difficulties.getDifficulties({ token })
     return difficulties
   } catch (e) {
     
