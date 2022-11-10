@@ -93,8 +93,12 @@ export default {
       loginFailed: false
     }
   },
+  async mounted () {
+    const user = await this.autoLogin()
+    if (user) this.$router.push({ name: 'home' })
+  },
   methods: {
-    ...mapActions('accounts', ['login']),
+    ...mapActions('accounts', ['login', 'autoLogin']),
     async onSubmit () {
       try {
         const { password, email } = this.form

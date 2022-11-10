@@ -4,8 +4,8 @@ export const login = async ({ email, password }) => {
   return axios.post('/login', { email, password })
 }
 
-export const verifyUserToken = ({ token }) => {
-  return axios.post('/verify', { token })
+export const verifyUserToken = ({ userId, authToken }) => {
+  return axios.post('/verify', { token: authToken, userId })
 }
 
 export const signIng = async (user) => {

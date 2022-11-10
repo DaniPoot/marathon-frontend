@@ -6,7 +6,7 @@ export const login = async function ({ commit }, { email, password, remember = f
     commit('setToken', token)
     localStorage.setItem('autologin', remember)
     localStorage.setItem('auth-token', token)
-    localStorage.setItem('auth-account', user)
+    localStorage.setItem('auth-account', JSON.stringify(user))
     return user
   } catch (e) {
     console.error(e)
@@ -16,18 +16,19 @@ export const login = async function ({ commit }, { email, password, remember = f
 
 }
 
-export const autoLogin = async function () {
+export const autoLogin = async function ({ commit }) {
   const remember = localStorage.getItem('autologin')
   if (!remember) return
   try {
     commit('general/setIsLoading', true, { root: true })
     const authToken = localStorage.getItem('auth-token')
-    const { user, token } = await this.$auth.verifyUserToken(authToken)
+    const { id: userId } = JSON.parse(localStorage.getItem('auth-account'))
+    const { user, token } = await this.$auth.verifyUserToken(authToken, userId)
     commit('setAccount', user)
     commit('setToken', token)
-    localStorage.setItem('autologin', remember)
+    console.log({ user, token })
     localStorage.setItem('auth-token', token)
-    localStorage.setItem('auth-account', user)
+    localStorage.setItem('auth-account', JSON.stringify(user))
     return user
   } catch (e) {
     console.error(e) 
