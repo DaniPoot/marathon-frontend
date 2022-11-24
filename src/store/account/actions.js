@@ -23,10 +23,9 @@ export const autoLogin = async function ({ commit }) {
     commit('general/setIsLoading', true, { root: true })
     const authToken = localStorage.getItem('auth-token')
     const { id: userId } = JSON.parse(localStorage.getItem('auth-account'))
-    const { user, token } = await this.$auth.verifyUserToken(authToken, userId)
+    const { user, token } = await this.$auth.verifyUserToken({ authToken, userId })
     commit('setAccount', user)
     commit('setToken', token)
-    console.log({ user, token })
     localStorage.setItem('auth-token', token)
     localStorage.setItem('auth-account', JSON.stringify(user))
     return user
