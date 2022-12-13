@@ -38,6 +38,141 @@ const routes = [
     }
   },
   {
+    path: '/questions',
+    component: () => import('@/pages/questions/Questions.vue'),
+    children: [
+      {
+        path: '',
+        name: 'question-list',
+        component: () => import('@/pages/questions/list/questions-list.vue'),
+        meta: {
+          authenticated: true,
+        }
+      },
+      {
+        path: 'create',
+        name: 'question-form',
+        component: () => import('@/pages/questions/form/question-form.vue'),
+        meta: {
+          authenticated: true,
+        }
+      },
+      {
+        path: 'edit/:questionId',
+        name: 'question-edit',
+        component: () => import('@/pages/questions/form/question-form.vue'),
+        meta: {
+          authenticated: true,
+        }
+      }
+    ],
+    meta: {
+      authenticated: true,
+    }
+  },
+  {
+    path: '/difficulties',
+    component: () => import('@/pages/questions/Questions.vue'),
+    children: [
+      {
+        path: '',
+        name: 'difficulties-list',
+        component: () => import('@/pages/difficulties/list/difficulties-list.vue'),
+        meta: {
+          authenticated: true,
+        }
+      },
+      {
+        path: 'create',
+        name: 'difficulty-form',
+        component: () => import('@/pages/difficulties/form/difficulty-form.vue'),
+        meta: {
+          authenticated: true,
+        },
+      },
+      {
+        path: 'edit/:difficultyId',
+        name: 'difficulty-edit',
+        component: () => import('@/pages/difficulties/form/difficulty-form.vue'),
+        props: true,
+        meta: {
+          authenticated: true,
+        },
+      }
+    ],
+    meta: {
+      authenticated: true,
+    }
+  },
+  {
+    path: '/subjects',
+    component: () => import('@/pages/questions/Questions.vue'),
+    children: [
+      {
+        path: '',
+        name: 'subjects-list',
+        component: () => import('@/pages/subjects/list/subjects-list.vue'),
+        meta: {
+          authenticated: true,
+        }
+      },
+      {
+        path: 'create',
+        name: 'subject-form',
+        component: () => import('@/pages/subjects/form/subject-form.vue'),
+        meta: {
+          authenticated: true,
+        },
+      },
+      {
+        path: 'edit/:subjectId',
+        name: 'subject-edit',
+        component: () => import('@/pages/subjects/form/subject-form.vue'),
+        props: true,
+        meta: {
+          authenticated: true,
+        },
+      }
+    ],
+    meta: {
+      authenticated: true,
+    }
+  },
+  {
+    path: '/topics',
+    component: () => import('@/pages/questions/Questions.vue'),
+    children: [
+      {
+        path: '',
+        name: 'topics-list',
+        component: () => import('@/pages/topics/list/topics-list.vue'),
+        meta: {
+          authenticated: true,
+        }
+      },
+      {
+        path: 'create',
+        name: 'topic-form',
+        component: () => import('@/pages/topics/form/topic-form.vue'),
+        meta: {
+          authenticated: true,
+        },
+      },
+      {
+        path: 'edit/:topicId',
+        name: 'topic-edit',
+        component: () => import('@/pages/topics/form/topic-form.vue'),
+        props: true,
+        meta: {
+          authenticated: true,
+        },
+      }
+    ],
+    meta: {
+      authenticated: true,
+    }
+  },
+  {
     path: '/board',
     name: 'board',
     component: () => import('@/pages/game/Board.vue'),
