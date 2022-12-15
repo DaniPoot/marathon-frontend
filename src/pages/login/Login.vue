@@ -95,7 +95,13 @@ export default {
   },
   async mounted () {
     const user = await this.autoLogin()
-    if (user) this.$router.push({ name: 'home' })
+    if (!user) return
+    if (this.$route.params) {
+      const params = this.$route.params
+      this.$router.push({ name: params.to, params: params.params })
+    } else {
+      this.$router.push({ name: 'home' })
+    }
   },
   methods: {
     ...mapActions('accounts', ['login', 'autoLogin']),
