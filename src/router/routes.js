@@ -1,3 +1,5 @@
+import { UserTypes } from '../const/UserTypes'
+
 const routes = [
   {
     path: '/',
@@ -5,12 +7,22 @@ const routes = [
     component: () => import('@/pages/home/Home.vue'),
     meta: {
       authenticated: true,
+      userTypes: [UserTypes.STUDENT]
+    }
+  },
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: () => import('@/pages/home/Dashboard.vue'),
+    meta: {
+      authenticated: true,
+      userTypes: [UserTypes.ADMINISTRATOR, UserTypes.PROFESSOR]
     }
   },
   {
     path: '/login',
     name: 'login',
-    component: () => import('@/pages/login/Login.vue')
+    component: () => import('@/pages/login/Login.vue'),
   },
   {
     path: '/signup',
@@ -27,6 +39,7 @@ const routes = [
     component: () => import('@/pages/game/Asigments.vue'),
     meta: {
       authenticated: true,
+      userTypes: [UserTypes.ALL]
     }
   },
   {
@@ -47,6 +60,7 @@ const routes = [
         component: () => import('@/pages/questions/list/questions-list.vue'),
         meta: {
           authenticated: true,
+          userTypes: [UserTypes.ADMINISTRATOR, UserTypes.PROFESSOR]
         }
       },
       {
@@ -55,6 +69,7 @@ const routes = [
         component: () => import('@/pages/questions/form/question-form.vue'),
         meta: {
           authenticated: true,
+          userTypes: [UserTypes.ADMINISTRATOR, UserTypes.PROFESSOR]
         }
       },
       {
@@ -63,6 +78,7 @@ const routes = [
         component: () => import('@/pages/questions/form/question-form.vue'),
         meta: {
           authenticated: true,
+          userTypes: [UserTypes.ADMINISTRATOR, UserTypes.PROFESSOR]
         }
       }
     ],
@@ -80,6 +96,7 @@ const routes = [
         component: () => import('@/pages/difficulties/list/difficulties-list.vue'),
         meta: {
           authenticated: true,
+          userTypes: [UserTypes.ADMINISTRATOR, UserTypes.PROFESSOR]
         }
       },
       {
@@ -88,6 +105,7 @@ const routes = [
         component: () => import('@/pages/difficulties/form/difficulty-form.vue'),
         meta: {
           authenticated: true,
+          userTypes: [UserTypes.ADMINISTRATOR, UserTypes.PROFESSOR]
         },
       },
       {
@@ -97,6 +115,7 @@ const routes = [
         props: true,
         meta: {
           authenticated: true,
+          userTypes: [UserTypes.ADMINISTRATOR, UserTypes.PROFESSOR]
         },
       }
     ],
@@ -114,6 +133,7 @@ const routes = [
         component: () => import('@/pages/subjects/list/subjects-list.vue'),
         meta: {
           authenticated: true,
+          userTypes: [UserTypes.ADMINISTRATOR, UserTypes.PROFESSOR]
         }
       },
       {
@@ -122,6 +142,7 @@ const routes = [
         component: () => import('@/pages/subjects/form/subject-form.vue'),
         meta: {
           authenticated: true,
+          userTypes: [UserTypes.ADMINISTRATOR, UserTypes.PROFESSOR]
         },
       },
       {
@@ -131,6 +152,7 @@ const routes = [
         props: true,
         meta: {
           authenticated: true,
+          userTypes: [UserTypes.ADMINISTRATOR, UserTypes.PROFESSOR]
         },
       }
     ],
@@ -148,6 +170,7 @@ const routes = [
         component: () => import('@/pages/topics/list/topics-list.vue'),
         meta: {
           authenticated: true,
+          userTypes: [UserTypes.ADMINISTRATOR, UserTypes.PROFESSOR]
         }
       },
       {
@@ -156,6 +179,7 @@ const routes = [
         component: () => import('@/pages/topics/form/topic-form.vue'),
         meta: {
           authenticated: true,
+          userTypes: [UserTypes.ADMINISTRATOR, UserTypes.PROFESSOR]
         },
       },
       {
@@ -165,6 +189,7 @@ const routes = [
         props: true,
         meta: {
           authenticated: true,
+          userTypes: [UserTypes.ADMINISTRATOR, UserTypes.PROFESSOR]
         },
       }
     ],
@@ -178,6 +203,7 @@ const routes = [
     component: () => import('@/pages/game/Board.vue'),
     meta: {
       authenticated: true,
+      userTypes: [UserTypes.ALL, UserTypes.ALL]
     }
   }
 ]

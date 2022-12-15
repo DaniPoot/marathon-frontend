@@ -19,13 +19,28 @@ export default function ({ store }) {
   })
 
   router.beforeEach((to, from, next) => {
-    const { authenticated } = to.meta
+    const { authenticated, userTypes } = to.meta
     const isAuthenticated = store.getters['accounts/isAuthenticated']
-    if (to.name !== 'login' && !isAuthenticated && authenticated) {
+    const userType = store.getters['accounts/userType']
+
+    if (!isAuthenticated && authenticated) {
       const route = { name: 'login', params: { to: to.name, params: to.params  } }
       next(route)
+    } else if (!isAuthenticated && !authenticated) {
+      next()
     }
-    else next()
+    if (isAuthenticated) {
+      if (userTypes.includes(userType) || userType === UserTypes.ALL) {
+        next()
+        return
+      }
+      if (userType === UserTypes.ADMINISTRATOR || userType === UserTypes.PROFESSOR) {
+        next({ name: 'dashboard' })
+        return
+      }
+      next({ name: 'home' })
+      return
+    }
   })
 
   return router
