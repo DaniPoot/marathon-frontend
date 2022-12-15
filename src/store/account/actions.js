@@ -36,7 +36,7 @@ export const autoLogin = async function ({ commit }) {
   }
 }
 
-export function logout () {
+export function logout ({ commit }) {
   commit('resetAccountInfo')
   localStorage.removeItem('autologin')
   localStorage.removeItem('auth-token')
