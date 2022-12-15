@@ -23,18 +23,18 @@
     </div>
     <div class="container pt-2 pt-lg-7 d-flex flex-column justify-content-around align-items-center minh-100">
       <div class="row">
-        <div class="col-md-6 mx-auto d-flex flex-column align-items-center">
-            <p class="h1 font-weight-bold text-white">Bienvenido al</p>
-            <p class="display-1 text-center text-white mt-5 font-weight-bolder" style="{'fontSize': '60px'}">Maratón de conocimientos</p>
+        <div class=" mx-auto d-flex flex-column align-items-center">
+            <p class="h1 font-weight-bold text-white text-center">¡Juego Terminado!</p>
+            <p class="display-1 text-center text-white mt-5 font-weight-bolder" style="{'fontSize': '60px'}">Puntaje: {{userPoints*100}}</p>
+            <div class="mt-5">
+                <img v-if="userPoints>ignorancePoints" src="/img/brand/brain.png " width='150px'/>
+                <img v-if="userPoints<=ignorancePoints" src="/img/brand/squirrel.png " width='150px'/>
+            </div>
         </div>
       </div>
       <div class="row">
         <div class="col">
-          <nav class="nav d-flex flex-column align-items-center mt-7">
-            <a class="nav-link text-white font-weight-bold display-4" href="/#/newgame">Iniciar nueva partida</a>
-            <a class="nav-link text-white font-weight-bold display-4" href="/">Ver perfil</a>
-            <a class="nav-link text-white font-weight-bold display-4" href="/#/login">Cerrar sesión</a>
-          </nav>
+            <base-button type="btn btn-secondary" tag="a" href="/#/" class="text-primary btn-lg" style="font-size:22px">INICIO</base-button>
         </div>
       </div>
     </div>
@@ -43,9 +43,12 @@
 </template>
 
 <script>
-
+import { mapState } from 'vuex'
 export default {
-  name: 'Home', 
+  name: 'Score',
+  computed: {
+    ...mapState('game', ['userPoints', 'ignorancePoints']),
+  }
 }
 </script>
 

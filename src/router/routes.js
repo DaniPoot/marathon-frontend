@@ -44,6 +44,14 @@ const routes = [
     meta: {
       authenticated: true,
     }
+  },
+  {
+    path: '/score',
+    name: 'score',
+    component: () => import('@/pages/game/Score.vue'),
+    meta: {
+      authenticated: true,
+    }
   }
 ]
 
