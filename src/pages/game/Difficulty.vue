@@ -97,10 +97,13 @@ export default {
     ...mapMutations('game', ['setTopics', 'setDifficulties', 'setAjustmen']),
     async getDifficulties () {
       this.difficulties = await this.getAllDifficulties()
+      
     },
     async getTopics () {
+      console.log(this.subjects)
       const promisesSubjects = this.subjects.map(subject => this.getTopicsBySubject({ subject: subject.id }))
       const topics = await Promise.all(promisesSubjects)
+      console.log(topics)
       this.subjectsWithTopics = this.subjects.map((subject, index)=> ({
         id: subject.id,
         name: subject.name,
