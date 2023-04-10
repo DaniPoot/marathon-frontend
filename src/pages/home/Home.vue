@@ -33,7 +33,7 @@
           <nav class="nav d-flex flex-column align-items-center mt-7">
             <a class="nav-link text-white font-weight-bold display-4" href="/#/newgame">Iniciar nueva partida</a>
             <a class="nav-link text-white font-weight-bold display-4" href="/">Ver perfil</a>
-            <a class="nav-link text-white font-weight-bold display-4" href="/#/login">Cerrar sesión</a>
+            <a class="nav-link text-white font-weight-bold display-4" href="/login" @click="onLogout">Cerrar sesión</a>
           </nav>
         </div>
       </div>
@@ -43,8 +43,16 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
-  name: 'Home'
+  name: 'Home',
+  methods: {
+    ...mapActions('accounts', ['logout']),
+    onLogout () {
+      this.logout()
+    }
+  }
 }
 </script>
 

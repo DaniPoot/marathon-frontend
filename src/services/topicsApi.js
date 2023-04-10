@@ -24,8 +24,16 @@ export const deleteTopic = ({ id, token }) => {
   })
 }
 
+export const getTopicById = ({ id, token }) => {
+  return axios.get(`/topics/${id}`, {
+    headers: {
+      authorization: `Bearer ${token}` 
+    }
+  })
+}
+
 export const getTopicsByUser = ({ userId, token }) => {
-  return axios.get('/topics', { created_by: userId }, {
+  return axios.get(`/topics/user/${userId}`, {
     headers: {
       authorization: `Bearer ${token}` 
     }

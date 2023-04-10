@@ -1,8 +1,18 @@
 export const createSubject = async function ({ commit }, { subject }) {
   try {
     const token = this.getters['accounts/token']
-    const { subjects } = this.$subjects.createSubject({ subject, token })
-    return subjects 
+    const { subjects } = await this.$subjects.createSubject({ subject, token })
+    return subjects[0]
+  } catch (e) {
+    
+  }
+}
+
+export const getSubjectById = async function ({ commit }, { id }) {
+  try {
+    const token = this.getters['accounts/token']
+    const { subjects } = await this.$subjects.getSubjectById({ id, token })
+    return subjects[0]
   } catch (e) {
     
   }
@@ -11,8 +21,8 @@ export const createSubject = async function ({ commit }, { subject }) {
 export const updateSubject = async function ({ commit }, { id, subject }) {
   try {
     const token = this.getters['accounts/token']
-    const { subjects } = this.$subjects.updateSubject({ id, token, subject })
-    return subjects 
+    const { subjects } = await this.$subjects.updateSubject({ id, token, subject })
+    return subjects[0]
   } catch (e) {
     
   }
@@ -21,17 +31,18 @@ export const updateSubject = async function ({ commit }, { id, subject }) {
 export const deleteSubject = async function ({ commit }, { id }) {
   try {
     const token = this.getters['accounts/token']
-    const { subjects } = this.$subjects.deleteSubject({ id, token })
+    const { subjects } = await this.$subjects.deleteSubject({ id, token })
     return subjects 
   } catch (e) {
     
   }
 }
 
-export const getSubjectsByUser = async function ({ commit }, { userId }) {
+export const getSubjectsByUser = async function ({ commit }, { userId = undefined }) {
   try {
     const token = this.getters['accounts/token']
-    const { subjects } = await this.$subjects.getSubjectsByUser({ userId, token })
+    const id = userId ? userId : this.getters['accounts/userId']
+    const { subjects } = await this.$subjects.getSubjectsByUser({ userId: id, token })
     return subjects 
   } catch (e) {
     
