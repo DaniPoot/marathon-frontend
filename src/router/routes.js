@@ -76,6 +76,7 @@ const routes = [
         path: 'edit/:questionId',
         name: 'question-edit',
         component: () => import('@/pages/questions/form/question-form.vue'),
+        props: true,
         meta: {
           authenticated: true,
           userTypes: [UserTypes.ADMINISTRATOR, UserTypes.PROFESSOR]
