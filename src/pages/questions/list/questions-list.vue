@@ -6,7 +6,7 @@
   </div>
   <table-component :columns="columns" :rows="rows" class="mt-sm" >
     <template #body-cell-actions="{ row }">
-      <table-actions @onDelete="onDeleteQuestion(row.id)" />
+      <table-actions @onDelete="onDeleteQuestion(row.id)" @onEdit="onEditQuestion(row.id)" />
     </template>
   </table-component>
 </section>
@@ -81,7 +81,7 @@ export default {
         
       }
     },
-    onEditTopic (questionId) {
+    onEditQuestion (questionId) {
       this.$router.push({ name: 'question-edit', params: { questionId } })
     },
     goToForm () {
