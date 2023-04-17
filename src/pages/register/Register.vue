@@ -75,7 +75,7 @@
                                 </base-input>
                                 <label class="text-danger" for="email" :class="{'d-none': !passwordNotMatch}"><small>Las contraseñas no coinciden</small></label>
                                 
-                                <vue-recaptcha class="mt-4 d-flex justify-content-center" :sitekey="process.env.VUE_APP_CAPTCHA_KEY"> </vue-recaptcha>
+                                <vue-recaptcha class="mt-4 d-flex justify-content-center" :sitekey="process.env.VUE_APP_API_URL"> </vue-recaptcha>
                                 <div class="text-center">
                                     <base-button type="primary" class="mt-4">REGISTRARSE</base-button>
                                 </div>
