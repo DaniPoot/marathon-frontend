@@ -1,3 +1,13 @@
+export const getQuestionById = async function ({ commit }, { id }) {
+  try {
+    const token = this.getters['accounts/token']
+    const { questions } = await this.$questions.getQuestionById({ id, token })
+    return questions[0]
+  } catch (e) {
+    
+  }
+}
+
 export const createQuestion = async function ({ commit }, { question }) {
   try {
     const token = this.getters['accounts/token']

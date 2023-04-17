@@ -40,3 +40,11 @@ export const verifyAnswer = ({ token, question, answer }) => {
     }
   })
 }
+
+export const getAnswersByQuestion = ({ questionId, token }) => {
+  return axios.get(`/answers/question/${questionId}`, {
+    headers: {
+      authorization: `Bearer ${token}` 
+    }
+  })
+}

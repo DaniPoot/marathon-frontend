@@ -1,5 +1,13 @@
 import axios from '../config/axios'
 
+export const getQuestionById = ({ id, token }) => {
+  return axios.get(`/questions/${id}`, {
+    headers: {
+      authorization: `Bearer ${token}` 
+    }
+  })
+}
+
 export const createQuestion = ({ question, token }) => {
   console.log({ question, token })
   return axios.post('/questions/create', question, {

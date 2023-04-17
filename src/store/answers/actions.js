@@ -50,3 +50,16 @@ export const verifyAnswer = async function ({ commit }, { question, answer }) {
     commit('general/setIsLoading', false, { root: true })
   }
 }
+
+export const getAnswersByQuestion = async function ({ commit }, { questionId }) {
+  try {
+    commit('general/setIsLoading', true, { root: true })
+    const token = this.getters['accounts/token']
+    const { answers } = await this.$answers.getAnswersByQuestion({ questionId, token })
+    return answers
+  } catch (e) {
+    
+  } finally {
+    commit('general/setIsLoading', false, { root: true })
+  }
+}
