@@ -126,6 +126,11 @@ export default {
     NavbarDashboard
   },
   mixins: [validations],
+  props: {
+    questionId: {
+      type: [String, Number]
+    }
+  },
   data () {
     return {
       form: {
@@ -144,23 +149,32 @@ export default {
       difficulties: [],
       topics: [],
       subjects: [],
+      formToValidate: {}
     }
   },
-  created () {
-    this.getInformation() 
+  async created () {
+    await this.getInformation() 
+    this.loadQuestion()
   },
   computed: {
-    ...mapGetters('accounts', ['userId'])
+    ...mapGetters('accounts', ['userId']),
+    isUpdating () {
+      return !!this.questionId
+    }
   },
   watch: {
     async 'form.subject' () {
       const topics = await this.getTopicsBySubject({ subject: this.form.subject })
       this.topics = topics.map(v => ({ value: v.id, label: v.name }))
+      if (this.isUpdating && (typeof this.form.topic === 'object')) {
+        this.form.topic = this.topics.find(topic => topic.label === this.form.topic.name).value
+        this.formToValidate = JSON.parse(JSON.stringify(this.form))
+      }
     }
   },
   methods: {
-    ...mapActions('questions', ['createQuestion', 'assignAnswersToQuestions']),
-    ...mapActions('answers', ['createAnswer']),
+    ...mapActions('questions', ['createQuestion', 'assignAnswersToQuestions', 'getQuestionById', 'updateQuestion']),
+    ...mapActions('answers', ['createAnswer', 'getAnswersByQuestion', 'updateAnswer', 'updateAnswerRelation']),
     ...mapActions('difficulties', ['getAllDifficulties']),
     ...mapActions('subjects', ['getSubjectsByUser']),
     ...mapActions('topics', ['getTopicsBySubject']),
@@ -175,7 +189,8 @@ export default {
       this.form.answers.push({
         key: Date.now(),
         description: undefined,
-        isCorrect: false
+        isCorrect: false,
+        isNew: true
       })
     },
     onRemoveAnswer (id) {
@@ -211,18 +226,152 @@ export default {
     },
     async onSubmit () {
       try {
-        const [question, answers] = await Promise.all([this.createQuestionByForm(), this.createAnswersByForm()])
-        console.log({ question, answers })
-        if (question && answers) {
-          const answersToAssign = this.formatAnswersToQuestion(answers)
-          const questionWithAnswers = await this.assignAnswersToQuestions({ id: question.id, answers: answersToAssign })
-          if (questionWithAnswers) {
-            this.$router.push({ name: 'question-list' })
-          }
+        if (this.isUpdating) {
+          await this.updateAllInQuestion()
+        } else {
+          await this.createNewQuestions()
         }
       } catch (e) {
         console.log({ e })
       }
+    },
+    async createNewQuestions () {
+      const [question, answers] = await Promise.all([this.createQuestionByForm(), this.createAnswersByForm()])
+      console.log({ question, answers })
+      if (question && answers) {
+        const answersToAssign = this.formatAnswersToQuestion(answers)
+        const questionWithAnswers = await this.assignAnswersToQuestions({ id: question.id, answers: answersToAssign })
+        if (questionWithAnswers) {
+          this.$router.push({ name: 'question-list' })
+        }
+      }
+    },
+    async loadQuestion () {
+      if (!this.questionId) return
+      const question = await this.getQuestionById({ id: this.questionId })
+      console.log({ question })
+      if (!question) {
+        // Mostrar mensaje 
+        this.$router.push({ name: 'question-list' })
+        return
+      }
+      const { description, dificulty, topic, id: questionId } = question
+
+      const answersResponse = await this.getAnswersByQuestion({ questionId })
+
+      const answers = answersResponse.map(answer => ({
+        key: answer.id,
+        description: answer.description,
+        isCorrect: answer.questions[0].questions_answers.is_correct,
+        questionsAnswersId: answer.questions[0].questions_answers.id
+      }))
+
+      this.form = {
+        difficulty: this.difficulties.find(v => v.label === dificulty.name).value,
+        subject: this.subjects.find(v => v.label === topic.subject.name).value,
+        topic,
+        description,
+        answers
+      }
+
+      this.formToValidate = JSON.parse(JSON.stringify(this.form))
+    },
+    verifyToUpdate () {
+      let updateQuestion = false
+      let updateAnswers = false
+      let updateRelations = false
+
+      const questionData = {}
+      const answersToChange = []
+      const relationsToChange = []
+      let newAnswers = []
+
+      const formKeys = Object.keys(this.form)
+      formKeys.forEach((key) => {
+        const isArray = Array.isArray(this.formToValidate[key])
+        if (!isArray) {
+          const isDifferent = this.formToValidate[key] !== this.form[key]
+          updateQuestion = isDifferent
+          questionData[key] = this.form[key]
+        } else {
+
+          newAnswers = this.form.answers.filter(answer => answer.isNew)
+
+          this.form.answers.filter(answer => !answer.isNew).forEach(answer => {
+            const answerToValidate = this.formToValidate.answers.find(ans => ans.key === answer.key)
+            
+            const isDifferentDescription = answer.description !== answerToValidate.description
+            const changeAnswer = answer.isCorrect !== answerToValidate.isCorrect
+            if (isDifferentDescription) {
+              updateAnswers = true
+              answersToChange.push({
+                id: answer.key,
+                description: answer.description
+              })
+            }
+
+            if (changeAnswer) {
+              console.log('changeAnswer', answer)
+              updateRelations = true
+              relationsToChange.push({
+                id: answer.questionsAnswersId,
+                isCorrect: answer.isCorrect
+              })
+            }
+          })
+        }
+      })
+      return {
+        updateQuestion,
+        updateAnswers,
+        updateRelations,
+        questionData,
+        answersToChange,
+        relationsToChange,
+        newAnswers
+      }
+    },
+    async updateAllInQuestion () {
+      const { updateQuestion: _updateQuestion, updateAnswers, updateRelations, questionData, answersToChange, newAnswers, relationsToChange } = this.verifyToUpdate()
+      const promises = []
+      
+      if (newAnswers.length > 0) {
+        const answers = newAnswers.map(ans => {
+          const answer = { 
+            description: ans.description,
+            created_by: this.userId
+          }
+          return this.createAnswer({ answer })
+        })
+        promises.push(...answers)
+      }
+
+      if (_updateQuestion) promises.push(this.updateQuestion({ id: this.questionId, question: questionData }))
+      if (updateAnswers) {
+        console.log({ answersToChange })
+        answersToChange.forEach(answer => {
+          console.log({ id: answer.id, answer: { description: answer.description } })
+          promises.push(this.updateAnswer({ id: answer.id, answer: { description: answer.description } }))
+        })
+      }
+
+      if (updateRelations) {
+        relationsToChange.forEach(relation => {
+          promises.push(this.updateAnswerRelation({ id: relation.id, relation: { is_correct: relation.isCorrect } }))
+        })
+      }
+
+      const promisesReturn = await Promise.all(promises)
+
+      if (newAnswers.length > 0) {
+        const answersToAssign = newAnswers.map((answer, index) => ({
+          id: promisesReturn[index].id,
+          is_correct: answer.isCorrect,
+          created_by: this.userId
+        }))
+        const questionWithAnswers = await this.assignAnswersToQuestions({ id: this.questionId, answers: answersToAssign })
+      }
+
     }
   },
 }

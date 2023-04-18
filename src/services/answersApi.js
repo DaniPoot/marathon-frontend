@@ -10,6 +10,7 @@ export const createAnswer = ({ answer, token }) => {
 }
 
 export const updateAnswer = ({ id, token, answer }) => {
+  console.log({ answer })
   return axios.put(`/answers/${id}`, answer, {
     headers: {
       authorization: `Bearer ${token}` 
@@ -35,6 +36,22 @@ export const getAnswersByUser = ({ userId, token }) => {
 
 export const verifyAnswer = ({ token, question, answer }) => {
   return axios.post('/answers/verify/',{ question, answer } ,{
+    headers: {
+      authorization: `Bearer ${token}` 
+    }
+  })
+}
+
+export const getAnswersByQuestion = ({ questionId, token }) => {
+  return axios.get(`/answers/question/${questionId}`, {
+    headers: {
+      authorization: `Bearer ${token}` 
+    }
+  })
+}
+
+export const updateAnswerRelation = ({ id, token, relation }) => {
+  return axios.post(`/answers/relation/${id}`, relation, {
     headers: {
       authorization: `Bearer ${token}` 
     }

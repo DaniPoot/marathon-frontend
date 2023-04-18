@@ -58,7 +58,7 @@
                                 <base-input alternative
                                             type="password"
                                             name="password"
-                                            placeholder="Constraseña"
+                                            placeholder="Contraseña"
                                             addon-left-icon="ni ni-lock-circle-open"
                                             class="mb-0"
                                             :class="{'border border-danger': isPasswordEmpty || passwordNotMatch || shortPassword}"
@@ -79,7 +79,7 @@
                                 </base-input>
                                 <label class="text-danger" for="email" :class="{'d-none': !passwordNotMatch}"><small>Las contraseñas no coinciden</small></label>
                                 
-                                <vue-recaptcha class="mt-4 d-flex justify-content-center" @verify="handleSuccess" @error="handleError" sitekey="6Lc-0WggAAAAACDCWg9AO333wjxXud9pOiDivfZw"> </vue-recaptcha>
+                                <vue-recaptcha class="mt-4 d-flex justify-content-center" @verify="handleSuccess" @error="handleError" :sitekey="captchaKey"> </vue-recaptcha>
                                 <div class="text-center">
                                     <base-button type="primary" class="mt-4" :disabled="!captchaVerified"  @click="onSubmit">REGISTRARSE</base-button>
                                 </div>
@@ -125,6 +125,11 @@ export default {
       captchaVerified: false
     }
   },
+  computed: {
+    captchaKey () {
+      return process.env.VUE_APP_CAPTCHA_KEY
+    }
+  },
   methods: {
     ...mapActions('accounts', ['signin']),
     handleSuccess () {
@@ -162,6 +167,7 @@ export default {
         console.error(e)
       }
     },
+    
   }
 }
 </script>

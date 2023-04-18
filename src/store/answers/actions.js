@@ -11,8 +11,8 @@ export const createAnswer = async function ({ commit }, { answer }) {
 export const updateAnswer = async function ({ commit }, { answer, id }) {
   try {
     const token = this.getters['accounts/token']
-    const { answer } = this.$answers.updateAnswer({ answer, token, id })
-    return answer
+    const { answer: answerResponse } = this.$answers.updateAnswer({ answer, token, id })
+    return answerResponse
   } catch (e) {
     
   }
@@ -48,5 +48,28 @@ export const verifyAnswer = async function ({ commit }, { question, answer }) {
     
   } finally {
     commit('general/setIsLoading', false, { root: true })
+  }
+}
+
+export const getAnswersByQuestion = async function ({ commit }, { questionId }) {
+  try {
+    commit('general/setIsLoading', true, { root: true })
+    const token = this.getters['accounts/token']
+    const { answers } = await this.$answers.getAnswersByQuestion({ questionId, token })
+    return answers
+  } catch (e) {
+    
+  } finally {
+    commit('general/setIsLoading', false, { root: true })
+  }
+}
+
+export const updateAnswerRelation = async function ({ commit }, { id, relation }) {
+  try {
+    const token = this.getters['accounts/token']
+    const { answer } = await this.$answers.updateAnswerRelation({ id, relation, token })
+    return answer
+  } catch (e) {
+    
   }
 }
