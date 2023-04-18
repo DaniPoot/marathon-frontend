@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import routes from './routes'
+import { UserTypes } from '../const/UserTypes'
 
 Vue.use(Router)
 
@@ -18,9 +19,28 @@ export default function ({ store }) {
   })
 
   router.beforeEach((to, from, next) => {
+    const { authenticated, userTypes } = to.meta
     const isAuthenticated = store.getters['accounts/isAuthenticated']
-    if (to.name !== 'login' && !isAuthenticated && to.meta.authenticated) next({ name: 'login' })
-    else next()
+    const userType = store.getters['accounts/userType']
+
+    if (!isAuthenticated && authenticated) {
+      const route = { name: 'login', params: { to: to.name, params: to.params  } }
+      next(route)
+    } else if (!isAuthenticated && !authenticated) {
+      next()
+    }
+    if (isAuthenticated) {
+      if (userTypes.includes(userType) || userType === UserTypes.ALL) {
+        next()
+        return
+      }
+      if (userType === UserTypes.ADMINISTRATOR || userType === UserTypes.PROFESSOR) {
+        next({ name: 'dashboard' })
+        return
+      }
+      next({ name: 'home' })
+      return
+    }
   })
 
   return router

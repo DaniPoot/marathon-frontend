@@ -1,4 +1,17 @@
 <template>
+  <div>
+    <h1>Admin Profesor</h1> 
+  </div>
+</template>
+<script>
+export default {
+  
+}
+</script>
+<style lang="">
+  
+</style>
+<template>
 <section>
   <img
     class="absolute-start col-3 d-none d-md-block"
@@ -31,8 +44,8 @@
       <div class="row">
         <div class="col">
           <nav class="nav d-flex flex-column align-items-center mt-7">
+             <a class="nav-link text-white font-weight-bold display-4" href="/#/subjects">Dashboard</a>
             <a class="nav-link text-white font-weight-bold display-4" href="/#/newgame">Iniciar nueva partida</a>
-            <a class="nav-link text-white font-weight-bold display-4" href="/">Ver perfil</a>
             <a class="nav-link text-white font-weight-bold display-4" href="/login" @click="onLogout">Cerrar sesión</a>
           </nav>
         </div>

@@ -1,6 +1,7 @@
 import axios from '../config/axios'
 
 export const createAnswer = ({ answer, token }) => {
+  console.log({ answer, token })
   return axios.post('/answers/create', answer, {
     headers: {
       authorization: `Bearer ${token}` 

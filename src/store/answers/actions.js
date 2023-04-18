@@ -1,8 +1,8 @@
 export const createAnswer = async function ({ commit }, { answer }) {
   try {
     const token = this.getters['accounts/token']
-    const { answer } = this.$answers.createAnswer({ answer, token })
-    return answer
+    const { answer: answerResponse } = await this.$answers.createAnswer({ answer, token })
+    return answerResponse
   } catch (e) {
     
   }

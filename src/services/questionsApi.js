@@ -1,7 +1,8 @@
 import axios from '../config/axios'
 
 export const createQuestion = ({ question, token }) => {
-  return axios.post('/questions', question, {
+  console.log({ question, token })
+  return axios.post('/questions/create', question, {
     headers: {
       authorization: `Bearer ${token}` 
     }
@@ -25,7 +26,7 @@ export const deleteQuestion = ({ id, token }) => {
 }
 
 export const getQuestionsByUser = ({ userId, token }) => {
-  return axios.get('/questions', { created_by: userId }, {
+  return axios.get(`/questions/user/${userId}`, {
     headers: {
       authorization: `Bearer ${token}` 
     }
@@ -34,6 +35,15 @@ export const getQuestionsByUser = ({ userId, token }) => {
 
 export const getQuestionByTopicsAndDifficulties = ({ topics, difficulties, token }) => {
   return axios.post('/questions/random', { topics, difficulties }, {
+    headers: {
+      authorization: `Bearer ${token}` 
+    }
+  })
+}
+
+export const assignAnswersToQuestions = ({ id, token, answers }) => {
+  console.log({ id, token, answers })
+  return axios.post(`/questions/${id}`, { answers }, {
     headers: {
       authorization: `Bearer ${token}` 
     }

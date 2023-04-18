@@ -17,12 +17,13 @@
           <div class="row">
             <div class="col">
               <p class="font-weight-bold">Puntaje: <span>{{ (userPoints*100) }}</span></p> 
+              <p class="font-weight-bold">Ajuste: <span>{{ }}</span></p> 
             </div>
           </div>
           <div class="row">
             <div class="col">
               <div class="column">
-                <p v-if="question" id="question" class="display-3 text-center mt-5 font-weight-bolder text-center">
+                <p v-if="question" id="question" style="max-height: 142px; overflow: scroll;" class="display-3 text-center mt-5 font-weight-bolder text-center">
                     {{ question.description }}
                 </p>
                 <div class="column">
@@ -77,11 +78,14 @@ export default {
       ignorancePosition: -1,
       showModal: true,
       sndCorrect: new Audio('/sounds/correct.mp3'),
-      sndFail: new Audio('/sounds/fail.mp3')
+      sndFail: new Audio('/sounds/fail.mp3'),
+      orderedDifficulties: [],
+      currentDifficulty: 0,
     }
   },
   async created () {
     await this.getQuestion()
+    this.orderDifficulties()
     this.selectQuestion()
     this.resetPoints()
   },
@@ -96,6 +100,18 @@ export default {
     ...mapActions('questions', ['getQuestionByTopicsAndDifficulties']),
     ...mapActions('answers', ['verifyAnswer']),
     ...mapMutations('game', ['addPointToUser', 'addPointToIgnorance', 'resetPoints']),
+    orderDifficulties() {
+      console.log(this.difficulties)
+      const dfficulties = [...this.difficulties].sort((a,b) => a.order - b.order)
+
+      console.log(dfficulties)
+    },
+    addDifficulty() {
+      this.currentDifficulty++
+    },
+    reduceDifficulty() {
+      this.currentDifficulty--
+    },
     async getQuestion () {
       try {
         this.questions = await this.getQuestionByTopicsAndDifficulties({

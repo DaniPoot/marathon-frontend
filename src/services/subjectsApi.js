@@ -1,7 +1,15 @@
 import axios from '../config/axios'
 
 export const createSubject = ({ subject, token }) => {
-  return axios.post('/subjects/create', answer, {
+  return axios.post('/subjects/create', subject, {
+    headers: {
+      authorization: `Bearer ${token}` 
+    }
+  })
+}
+
+export const getSubjectById = ({ id, token }) => {
+  return axios.get(`/subjects/${id}`, {
     headers: {
       authorization: `Bearer ${token}` 
     }

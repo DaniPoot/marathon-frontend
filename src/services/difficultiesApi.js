@@ -1,7 +1,15 @@
 import axios from '../config/axios'
 
 export const createDifficulty = ({ difficulty, token }) => {
-  return axios.post('/difficulties', difficulty, {
+  return axios.post('/difficulties/create', difficulty, {
+    headers: {
+      authorization: `Bearer ${token}` 
+    }
+  })
+}
+
+export const getDifficultyById = ({ id, token }) => {
+  return axios.get(`/difficulties/${id}`, {
     headers: {
       authorization: `Bearer ${token}` 
     }
