@@ -167,8 +167,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions('questions', ['createQuestion', 'assignAnswersToQuestions', 'getQuestionById']),
-    ...mapActions('answers', ['createAnswer', 'getAnswersByQuestion']),
+    ...mapActions('questions', ['createQuestion', 'assignAnswersToQuestions', 'getQuestionById', 'updateQuestion']),
+    ...mapActions('answers', ['createAnswer', 'getAnswersByQuestion', 'updateAnswer', 'updateAnswerRelation']),
     ...mapActions('difficulties', ['getAllDifficulties']),
     ...mapActions('subjects', ['getSubjectsByUser']),
     ...mapActions('topics', ['getTopicsBySubject']),
@@ -221,7 +221,7 @@ export default {
     async onSubmit () {
       try {
         if (this.isUpdating) {
-
+          await this.updateAllInQuestion()
         } else {
           await this.createNewQuestions()
         }
@@ -271,33 +271,102 @@ export default {
       this.formToValidate = JSON.parse(JSON.stringify(this.form))
     },
     verifyToUpdate () {
-      const updateQueston = false
-      const updateAnswers = false
-      const updateRelations = false
+      let updateQuestion = false
+      let updateAnswers = false
+      let updateRelations = false
 
       const questionData = {}
+      const answersToChange = []
+      const relationsToChange = []
+      let newAnswers = []
 
       const formKeys = Object.keys(this.form)
-      formKeys.forEach(() => {
+      formKeys.forEach((key) => {
         const isArray = Array.isArray(this.formToValidate[key])
         if (!isArray) {
           const isDifferent = this.formToValidate[key] !== this.form[key]
-          updateQueston = isDifferent
+          updateQuestion = isDifferent
           questionData[key] = this.form[key]
         } else {
-          
-          this.formToValidate.forEach((answer, index) => {
-            const isDifferent = answer.description !== this.form.answers[index].description
-            updateAnswers = isDifferent
+
+          newAnswers = this.form.answers.filter(answer => answer.isNew)
+
+          this.form.answers.filter(answer => !answer.isNew).forEach(answer => {
+            const answerToValidate = this.formToValidate.answers.find(ans => ans.key === answer.key)
+            
+            const isDifferentDescription = answer.description !== answerToValidate.description
+            const changeAnswer = answer.isCorrect !== answerToValidate.isCorrect
+            if (isDifferentDescription) {
+              updateAnswers = true
+              answersToChange.push({
+                id: answer.key,
+                description: answer.description
+              })
+            }
+
+            if (changeAnswer) {
+              console.log('changeAnswer', answer)
+              updateRelations = true
+              relationsToChange.push({
+                id: answer.questionsAnswersId,
+                isCorrect: answer.isCorrect
+              })
+            }
           })
         }
       })
       return {
-        updateQueston,
+        updateQuestion,
         updateAnswers,
         updateRelations,
+        questionData,
+        answersToChange,
+        relationsToChange,
+        newAnswers
       }
     },
+    async updateAllInQuestion () {
+      const { updateQuestion: _updateQuestion, updateAnswers, updateRelations, questionData, answersToChange, newAnswers, relationsToChange } = this.verifyToUpdate()
+      const promises = []
+      
+      if (newAnswers.length > 0) {
+        const answers = newAnswers.map(ans => {
+          const answer = { 
+            description: ans.description,
+            created_by: this.userId
+          }
+          return this.createAnswer({ answer })
+        })
+        promises.push(...answers)
+      }
+
+      if (_updateQuestion) promises.push(this.updateQuestion({ id: this.questionId, question: questionData }))
+      if (updateAnswers) {
+        console.log({ answersToChange })
+        answersToChange.forEach(answer => {
+          console.log({ id: answer.id, answer: { description: answer.description } })
+          promises.push(this.updateAnswer({ id: answer.id, answer: { description: answer.description } }))
+        })
+      }
+
+      if (updateRelations) {
+        relationsToChange.forEach(relation => {
+          promises.push(this.updateAnswerRelation({ id: relation.id, relation: { is_correct: relation.isCorrect } }))
+        })
+      }
+
+      const promisesReturn = await Promise.all(promises)
+
+      if (newAnswers.length > 0) {
+        const answersToAssign = newAnswers.map((answer, index) => ({
+          id: promisesReturn[index].id,
+          is_correct: answer.isCorrect,
+          created_by: this.userId
+        }))
+        const questionWithAnswers = await this.assignAnswersToQuestions({ id: this.questionId, answers: answersToAssign })
+      }
+
+    }
   },
 }
 </script>

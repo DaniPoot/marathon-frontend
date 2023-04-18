@@ -18,7 +18,7 @@ export const createQuestion = async function ({ commit }, { question }) {
   }
 }
 
-export const updateQuestion = async function ({ commit }, { question }) {
+export const updateQuestion = async function ({ commit }, { question, id }) {
   try {
     const token = this.getters['accounts/token']
     const { questions } = this.$questions.updateQuestion({ id, token, question })
