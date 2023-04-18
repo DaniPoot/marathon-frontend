@@ -1,5 +1,6 @@
 <template>
 <section>
+  <navbar-dashboard></navbar-dashboard>
   <div class="row">
     <h1>Dificultades</h1>
     <button type="button" class="btn btn-primary ml-auto" @click="goToForm">Nueva Dificultad</button>
@@ -15,11 +16,12 @@
 import { mapActions } from 'vuex'
 import TableComponent from '../../../components/Table.vue'
 import TableActions from '../../../components/TableActions.vue'
-  
+import NavbarDashboard from '../../../components/NavbarDashboard'
 export default {
   components: {
     TableComponent,
-    TableActions
+    TableActions,
+    NavbarDashboard
   },
   data () {
     return {

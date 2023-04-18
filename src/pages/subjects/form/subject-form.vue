@@ -2,19 +2,20 @@
 <FormulateForm
   @submit="onSubmit"
 >
-  <h1> {{ isUpdating ? `Materia: ${subjectId}` : 'Nueva Materia' }} </h1>
+  <navbar-dashboard></navbar-dashboard>
+  <h1> {{ isUpdating ? `Asignatura: ${subjectId}` : 'Nueva Asignatura' }} </h1>
   <div class="row">
     <div class="col">
         <FormulateInput
           type="text"
           name="Materia"
-          label="Materia"
+          label="Asignatura"
           validation="required|min:5"
-          placeholder="Nombre de la materia"
+          placeholder="Nombre de la asignatura"
           class="mb-0"
           :validation-messages="{
-            required: 'La materia es requerida',
-            min: 'La materia debe contener al menos 10 caracteres'
+            required: 'La asignatura es requerida',
+            min: 'La asignatura debe contener al menos 10 caracteres'
           }"
           v-model="form.name"
         />
@@ -24,7 +25,7 @@
     <div class="col">
       <FormulateInput
         type="submit"
-        :label="isUpdating ? 'Editar materia' : 'Registrar materia'"
+        :label="isUpdating ? 'Editar asignatura' : 'Registrar asignatura'"
       />
     </div>
   </div>
@@ -33,9 +34,13 @@
   
 <script>
 import { mapActions, mapGetters } from 'vuex'
-  
+import NavbarDashboard from '../../../components/NavbarDashboard'
+
 export default {
   name: 'question-form',
+  components: { 
+    NavbarDashboard 
+  },
   props: {
     subjectId: {
       type: [String, Number]

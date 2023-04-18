@@ -2,6 +2,7 @@
 <FormulateForm
   @submit="onSubmit"
 >
+  <navbar-dashboard></navbar-dashboard>
   <h1> Nueva pregunta </h1>
   <div class="row">
     <div class="col-md-6">
@@ -117,8 +118,13 @@
 import { mapActions, mapGetters } from 'vuex'
 import { validations }  from '@/utilities/validations'
 
+import NavbarDashboard from '../../../components/NavbarDashboard'
+
 export default {
   name: 'question-form',
+  components:{
+    NavbarDashboard
+  },
   mixins: [validations],
   props: {
     questionId: {

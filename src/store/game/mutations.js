@@ -20,6 +20,11 @@ export const clearGame = (state) => {
   }
 }
 
+export const resetPoints = (state) => {
+  state.userPoints = 0
+  state.ignorancePoints = 0
+}
+
 export const addPointToUser = (state) => {
   state.userPoints++
 }

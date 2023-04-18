@@ -8,7 +8,7 @@ export const verifyUserToken = ({ userId, authToken }) => {
   return axios.post('/verify', { token: authToken, userId })
 }
 
-export const signIng = async (user) => {
+export const signin = async (user) => {
   return axios.post('/sigin', user)
 }
 

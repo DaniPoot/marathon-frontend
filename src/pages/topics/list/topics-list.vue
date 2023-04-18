@@ -1,8 +1,9 @@
 <template>
 <section>
+<navbar-dashboard></navbar-dashboard>
   <div class="row">
     <h1>Temas</h1>
-    <button type="button" class="btn btn-primary ml-auto" @click="goToForm">Nueva Tema</button>
+    <button type="button" class="btn btn-primary ml-auto" @click="goToForm">Nuevo Tema</button>
   </div>
   <table-component :columns="columns" :rows="rows" class="mt-sm" >
     <template #body-cell-actions="{ row }">
@@ -15,11 +16,13 @@
 import { mapActions } from 'vuex'
 import TableComponent from '../../../components/Table.vue'
 import TableActions from '../../../components/TableActions.vue'
+import NavbarDashboard from '../../../components/NavbarDashboard'
   
 export default {
   components: {
     TableComponent,
-    TableActions
+    TableActions,
+    NavbarDashboard
   },
   data () {
     return {

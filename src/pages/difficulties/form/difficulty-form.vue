@@ -2,6 +2,7 @@
 <FormulateForm
   @submit="onSubmit"
 >
+  <navbar-dashboard></navbar-dashboard>
   <h1> {{ isUpdating ? `Difficultad: ${difficultyId}` : 'Nueva Difficultad' }} </h1>
   <div class="row">
     <div class="col">
@@ -53,9 +54,13 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { validations }  from '@/utilities/validations'
+import NavbarDashboard from '../../../components/NavbarDashboard'
 
 export default {
   name: 'question-form',
+  components: {
+    NavbarDashboard
+  },
   props: {
     difficultyId: {
       type: [String, Number]

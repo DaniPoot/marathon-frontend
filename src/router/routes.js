@@ -39,7 +39,7 @@ const routes = [
     component: () => import('@/pages/game/Asigments.vue'),
     meta: {
       authenticated: true,
-      userTypes: [UserTypes.ALL]
+      userTypes: [UserTypes.ADMINISTRATOR, UserTypes.PROFESSOR, UserTypes.STUDENT]
     }
   },
   {
@@ -48,6 +48,7 @@ const routes = [
     component: () => import('@/pages/game/Difficulty.vue'),
     meta: {
       authenticated: true,
+      userTypes: [UserTypes.ADMINISTRATOR, UserTypes.PROFESSOR, UserTypes.STUDENT]
     }
   },
   {
@@ -204,7 +205,16 @@ const routes = [
     component: () => import('@/pages/game/Board.vue'),
     meta: {
       authenticated: true,
-      userTypes: [UserTypes.ALL, UserTypes.ALL]
+      userTypes: [UserTypes.ADMINISTRATOR, UserTypes.PROFESSOR, UserTypes.STUDENT]
+    }
+  },
+  {
+    path: '/score',
+    name: 'score',
+    component: () => import('@/pages/game/Score.vue'),
+    meta: {
+      authenticated: true,
+      userTypes: [UserTypes.ADMINISTRATOR, UserTypes.PROFESSOR, UserTypes.STUDENT]
     }
   }
 ]

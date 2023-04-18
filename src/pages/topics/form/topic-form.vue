@@ -2,6 +2,7 @@
 <FormulateForm
   @submit="onSubmit"
 >
+<navbar-dashboard></navbar-dashboard>
   <h1> {{ isUpdating ? `Tema: ${topicId}` : 'Nuevo Tema' }} </h1>
   <div class="row pt-3">
     <div class="col">
@@ -10,11 +11,11 @@
           v-model="form.id_subject"
           :options="subjects"
           type="select"
-          placeholder="Selecciona una tema"
-          label="Tema"
+          placeholder="Selecciona una asignatura"
+          label="Asignatura"
           validation="required"
           :validation-messages="{
-            required: 'El tema es requerido',
+            required: 'La asignatura es requerida',
           }"
         />
       </div>
@@ -50,9 +51,13 @@
   
 <script>
 import { mapActions, mapGetters } from 'vuex'
-  
+import NavbarDashboard from '../../../components/NavbarDashboard'
+
 export default {
   name: 'question-form',
+  components: {
+    NavbarDashboard
+  },
   props: {
     topicId: {
       type: [String, Number]
