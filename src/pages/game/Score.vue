@@ -34,7 +34,7 @@
       </div>
       <div class="row">
         <div class="col">
-            <base-button type="btn btn-secondary" tag="a" href="/#/" class="text-primary btn-lg" style="font-size:22px">INICIO</base-button>
+            <base-button type="btn btn-secondary" tag="a" href="/#/" class="text-primary btn-lg" style="font-size:22px">Regresar al menú principal</base-button>
         </div>
       </div>
     </div>

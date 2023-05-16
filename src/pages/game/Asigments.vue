@@ -26,11 +26,6 @@
                                 </base-input>
                             </div>
                         </div>
-                        <div class="my-1 py-2 border-top text-center">
-                            <div class="row justify-content-center">
-                                <base-button @click="sendSubjects" type="primary btn-sm" class="text-white btn-lg col-md-3 col-8" style="font-size:22px">SIGUIENTE</base-button>
-                            </div>
-                        </div>
                         <div class="row justify-content-center">
                             <card class="col-sm-12 col-md-4 col-lg-2 m-1" v-for="subject in allSubjects" v-bind:key="subject.id">
                                  <div class="card-body d-flex flex-column justify-content-between p-0 m-0 h-100">
@@ -43,6 +38,12 @@
                                 </div>
                             </card>
                         </div>
+                          <div class="my-1 py-2 border-top text-center">
+                            <div class="row justify-content-center">
+                                <base-button @click="back" type="btn-light">regresar</base-button>
+                                <base-button @click="sendSubjects" :disabled="!allSubjects.some(asigment => asigment.selected)" type="primary btn-sm" class="text-white btn-lg col-md-3 col-8" style="font-size:22px">SIGUIENTE</base-button>
+                            </div>
+                        </div>
                     </div>
                 </card>
             </div>
@@ -50,20 +51,21 @@
     </div>
 </template>
 <script>
-import { mapActions, mapMutations } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 
 export default {
   name: 'Login',
   data () {
     return {
-      subjects: [],
+      selectSubjects: [],
       subjectByQuery: [],
       search: '',
     }
   },
   async created () {
     const subjects = await this.getAllSubjects()
-    this.subjects = subjects.map(s => ({ ...s, selected: false }))
+    this.selectSubjects = subjects.map(s => ({ ...s, selected: this.subjects.some(subject => s.id === subject.id) }))
+   
   },
   watch: {
     async search () {
@@ -75,18 +77,23 @@ export default {
   },
   computed: {
     allSubjects () {
-      const subjects = [...this.subjects, ...this.subjectByQuery]
+      const subjects = [...this.selectSubjects, ...this.subjectByQuery]
       return subjects
     },
     subjectsId () {
-      return this.subjects.map(v => v.id)
-    }
+      return this.selectSubjects.map(v => v.id)
+    },
+    ...mapState('subjects', ['subjects']),
+    
   },
   methods: {
     ...mapActions('subjects', ['getAllSubjects', 'getAllSubjectsByQuery']),
-    ...mapMutations('subjects',['setSubjects']),
+    ...mapMutations('subjects',['setSubjects', 'getSubjects']),
     selectSubject (subject) {
       subject.selected = true
+    },
+    back () {
+      this.$router.push({ name: 'home' })
     },
     deselectSubject (subject) {
       subject.selected = false

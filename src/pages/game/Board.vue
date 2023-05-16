@@ -14,11 +14,12 @@
     <div  id="board-container" class="container pt-2 pt-lg-7 d-flex flex-column justify-content-around align-items-center minh-100">
       <card shadow class="card-profile" style="width: 95vw; height: 85vh">
         <div class="column">
-          <div class="row">
-            <div class="col">
-              <p class="font-weight-bold">Puntaje: <span>{{ (userPoints*100) }}</span></p> 
-              <p class="font-weight-bold">Ajuste: <span>{{ }}</span></p> 
-            </div>
+          <div class="row d-flex align-items-center gap-2">
+              <p class="font-weight-bold mb-0 mr-4">Puntaje: <span>{{ (userPoints*100) }}</span></p> 
+                 <!-- Button trigger modal -->
+                <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#exitModal">
+                  Regresar al menú
+                </button>
           </div>
           <div class="row">
             <div class="col">
@@ -32,7 +33,7 @@
                       :class="{ 'mb-sm text-center heading': true, 'bg-default text-white': answer.id === answerSelected} "
                       v-for="answer in question.answers"
                       :key="answer.id"
-                      style="cursor:pointer"
+                      style="cursor:pointer; text-transform: inherit"
                       @click.native="onSelectAnswer(answer.id)"
                     >
                       {{ answer.description }} 
@@ -41,7 +42,7 @@
                 </div>
                 <div class="text-center">
                   <base-button type="btn btn-primary" :disabled="!answerSelected" @click="validateAnswer" class="text-white" >
-                    Siguiente Pregunta
+                    Responder
                   </base-button>
                 </div>
               </div>
@@ -53,15 +54,37 @@
         </div>
       </card>
     </div>
+
+<!-- Modal -->
+<div class="modal fade" id="exitModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Salir de la partida</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ¿Está seguro de terminar esta partida y regresal al menú? Su progreso actual se perderá.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No, continuar partida</button>
+        <base-button type="button" @click="exitGame" class="btn btn-primary">Sí, terminar partida</base-button>
+      </div>
+    </div>
+  </div>
+</div>
+
   </section>
 </section>
+
 </template>
 
 <script>
 import party from 'party-js'
 import { mapActions, mapState, mapMutations } from 'vuex'
 import Card from '@/components/Card'
-import Modal from '@/components/Modal'
 import GameBoard from '@/components/GameBoard'
 
 export default {
@@ -76,7 +99,6 @@ export default {
       answerSelected: undefined,
       playerPosition: -1,
       ignorancePosition: -1,
-      showModal: true,
       sndCorrect: new Audio('/sounds/correct.mp3'),
       sndFail: new Audio('/sounds/fail.mp3'),
       orderedDifficulties: [],
@@ -100,11 +122,14 @@ export default {
     ...mapActions('questions', ['getQuestionByTopicsAndDifficulties']),
     ...mapActions('answers', ['verifyAnswer']),
     ...mapMutations('game', ['addPointToUser', 'addPointToIgnorance', 'resetPoints']),
-    orderDifficulties() {
-      console.log(this.difficulties)
-      const dfficulties = [...this.difficulties].sort((a,b) => a.order - b.order)
+    exitGame(){
+      this.$router.push('/#/').catch(error => {
+        console.info(error.message)
+      })
+    },
 
-      console.log(dfficulties)
+    orderDifficulties() {
+      const dfficulties = [...this.difficulties].sort((a,b) => a.order - b.order)
     },
     addDifficulty() {
       this.currentDifficulty++

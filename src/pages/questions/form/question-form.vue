@@ -37,6 +37,7 @@
       <div class="form-group">
         <FormulateInput
           v-model="form.topic"
+          data-live-search="true"
           :options="topics"
           type="select"
           placeholder="Selecciona una tema"
@@ -98,7 +99,7 @@
       <div class="form-group">
         <div class="custom-control custom-checkbox mb-3 mt-4 pt-3">
           <input class="custom-control-input" :id="answer.key" type="checkbox" v-model="answer.isCorrect">
-          <label class="custom-control-label" :for="answer.key">Es correcta?</label>
+          <label class="custom-control-label" :for="answer.key">¿Es correcta?</label>
         </div>
       </div>
     </div>
@@ -107,7 +108,7 @@
     <div class="col">
       <FormulateInput
         type="submit"
-        label="Register"
+        label="Guardar"
       />
     </div>
   </div>
