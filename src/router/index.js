@@ -19,12 +19,16 @@ export default function ({ store }) {
   })
 
   router.beforeEach((to, from, next) => {
+    let modalBackground = document.querySelector('.modal-backdrop')
+    if (modalBackground) {
+      modalBackground.remove()
+    }
     const { authenticated, userTypes } = to.meta
     const isAuthenticated = store.getters['accounts/isAuthenticated']
     const userType = store.getters['accounts/userType']
 
     if (!isAuthenticated && authenticated) {
-      const route = { name: 'login', params: { to: to.name, params: to.params  } }
+      const route = { name: 'login', params: { to: to.name, params: to.params } }
       next(route)
     } else if (!isAuthenticated && !authenticated) {
       next()
@@ -41,6 +45,7 @@ export default function ({ store }) {
       next({ name: 'home' })
       return
     }
+
   })
 
   return router
