@@ -12,7 +12,7 @@
     />
     <button type="button" class="btn btn-primary" @click="goToForm">Nueva pregunta</button>
   </div>
-  <table-component :columns="columns" :rows="rows" class="mt-sm" >
+  <table-component :columns="columns" :rows="questions" class="mt-sm" >
     <template #body-cell-actions="{ row }">
       <table-actions @onDelete="onDeleteQuestion(row.id)" @onEdit="onEditQuestion(row.id)" />
     </template>
@@ -74,9 +74,10 @@ export default {
   computed: {
     ...mapGetters('accounts', ['userId']),
     subjects () {
-      return this.rows.map(({ topic }) => topic.subject.name)
+      const allSubjects = this.rows.map(({ topic }) => topic.subject.name)
+      return [...new Set(allSubjects)]
     },
-    questiosn () {
+    questions () {
       if (this.subject === '') return this.rows
       return this.rows.filter(({ topic }) => topic.subject.name === this.subject)
     }
