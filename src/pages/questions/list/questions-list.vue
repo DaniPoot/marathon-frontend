@@ -3,7 +3,14 @@
   <navbar-dashboard></navbar-dashboard>
   <div class="row">
     <h1>Preguntas</h1>
-    <button type="button" class="btn btn-primary ml-auto" @click="goToForm">Nueva pregunta</button>
+    <FormulateInput
+      class="ml-auto mr-2 my-auto"
+      v-model="subject"
+      :options="subjects"
+      type="select"
+      placeholder="Selecciona una materia"
+    />
+    <button type="button" class="btn btn-primary" @click="goToForm">Nueva pregunta</button>
   </div>
   <table-component :columns="columns" :rows="rows" class="mt-sm" >
     <template #body-cell-actions="{ row }">
@@ -57,14 +64,22 @@ export default {
           label: 'Acciones',
         }
       ],
-      rows: [] 
+      rows: [],
+      subject: '',
     }
   },
   created() {
     this.getQuestions()
   },
   computed: {
-    ...mapGetters('accounts', ['userId'])
+    ...mapGetters('accounts', ['userId']),
+    subjects () {
+      return this.rows.map(({ topic }) => topic.subject.name)
+    },
+    questiosn () {
+      if (this.subject === '') return this.rows
+      return this.rows.filter(({ topic }) => topic.subject.name === this.subject)
+    }
   },
   methods: {
     ...mapActions('questions', ['getQuestionsByUser', 'deleteQuestion']),
